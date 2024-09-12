@@ -2,6 +2,8 @@
 
 Please make it super easy for human edition. 
 Please document at the top of each file with the algorithm used in this file. What it is for and how it works.
+When generating code, please think step by step and explain what you are doing in increasingly complex steps in order to generate great and concise naming and comments.
+Comments started with Note! are notes to human editors. Please do not remove them unless they are not appliable or you have a good reason.
 
 # Utils
 

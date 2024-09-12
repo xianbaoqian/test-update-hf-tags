@@ -29,14 +29,18 @@ def get_model_info(repo_id: str, revision: str = None, token: str = None, timeou
                           files_metadata=True)
 
 if __name__ == "__main__":
-    # Test case to run through a model
-    test_repo_id = "google/gemma-7b"
+    # Test case to run through multiple models
+    test_repo_ids = ["google/gemma-7b", "monster-labs/control_v1p_sd15_qrcode_monster"]
     hf_token = os.getenv("HF_TOKEN")  # Ensure you have your Hugging Face token in the .env file
-    try:
-        model_info = get_model_info(repo_id=test_repo_id, token=hf_token)
-        print(model_info.siblings)
-        print(model_info.tags)
-        print(model_info.library_name)
-        print(model_info.pipeline_tag)
-    except Exception as e:
-        print(f"An error occurred: {e}")
+
+    for repo_id in test_repo_ids:
+        try:
+            model_info = get_model_info(repo_id=repo_id, token=hf_token)
+            print(f"Model Info for {repo_id}:")
+            print("Siblings:", model_info.siblings)
+            print("Tags:", model_info.tags)
+            print("Library Name:", model_info.library_name)
+            print("Pipeline Tag:", model_info.pipeline_tag)
+            print("\n")
+        except Exception as e:
+            print(f"An error occurred for {repo_id}: {e}")
