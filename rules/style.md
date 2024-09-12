@@ -1,6 +1,7 @@
 # Overall
 
 Please make it super easy for human edition. 
+Please document at the top of each file with the algorithm used in this file. What it is for and how it works.
 
 # Utils
 
