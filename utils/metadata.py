@@ -40,7 +40,7 @@ def update_metadata(metadata: Dict, library_name: str = "transformers") -> Dict:
     metadata["library_name"] = library_name
     return metadata
 
-def save_metadata(repo_id: str, metadata: Dict, create_pr: bool = True) -> Optional[str]:
+def save_metadata(repo_id: str, metadata: Dict, create_pr: bool = True, commit_message: str = "Update metadata tags") -> Optional[str]:
     """
     Save the updated metadata to the Hugging Face model repository.
 
@@ -59,7 +59,7 @@ def save_metadata(repo_id: str, metadata: Dict, create_pr: bool = True) -> Optio
         
         pr_url = repo_card.push_to_hub(
             repo_id=repo_id,
-            commit_message="Update metadata",
+            commit_message=commit_message,
             create_pr=create_pr
         )
         print(f"Successfully {'created a pull request' if create_pr else 'pushed'} to update metadata for {repo_id}")
