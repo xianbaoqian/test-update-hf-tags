@@ -1,0 +1,40 @@
+Model info contains computed tags for a model such as pipeline_tag 
+
+e.g. "pipeline_tag":"text-generation"
+
+Doc on how to get model info HFApi
+
+> from from huggingface_hub import HfApi
+
+model_info
+<
+source
+>
+( repo_id: strrevision: typing.Optional[str] = Nonetoken: typing.Optional[str] = Nonetimeout: typing.Optional[float] = NonesecurityStatus: typing.Optional[bool] = None ) → ModelInfo
+
+Parameters
+
+repo_id (str) — A namespace (user or an organization) and a repo name separated by a /.
+revision (str, optional) — The revision of the model repository from which to get the information.
+token (str, optional) — An authentication token [1]_.
+timeout (float, optional) — Whether to set a timeout for the request to the Hub.
+securityStatus (bool, optional) — Whether to retrieve the security status from the model repository as well.
+Returns
+
+ModelInfo
+
+The model repository information.
+
+Get info on one specific model on huggingface.co
+
+Model can be private if you pass an acceptable token or are logged in.
+
+References:
+
+[1] https://huggingface.co/settings/tokens
+
+
+---
+
+Example output:
+ModelInfo(id='google/gemma-7b', author='google', sha='ff6768d9368919a1f025a54f9f5aa0ee591730bb', created_at=datetime.datetime(2024, 2, 8, 22, 36, 43, tzinfo=datetime.timezone.utc), last_modified=datetime.datetime(2024, 6, 27, 14, 9, 40, tzinfo=datetime.timezone.utc), private=False, gated='manual', disabled=False, downloads=249297, downloads_all_time=None, likes=3020, library_name='transformers', tags=['transformers', 'safetensors', 'gguf', 'gemma', 'text-generation', 'arxiv:2305.14314', 'arxiv:2312.11805', 'arxiv:2009.03300', 'arxiv:1905.07830', 'arxiv:1911.11641', 'arxiv:1904.09728', 'arxiv:1905.10044', 'arxiv:1907.10641', 'arxiv:1811.00937', 'arxiv:1809.02789', 'arxiv:1911.01547', 'arxiv:1705.03551', 'arxiv:2107.03374', 'arxiv:2108.07732', 'arxiv:2110.14168', 'arxiv:2304.06364', 'arxiv:2206.04615', 'arxiv:1804.06876', 'arxiv:2110.08193', 'arxiv:2009.11462', 'arxiv:2101.11718', 'arxiv:1804.09301', 'arxiv:2109.07958', 'arxiv:2203.09509', 'license:gemma', 'autotrain_compatible', 'text-generation-inference', 'endpoints_compatible', 'region:us'], pipeline_tag='text-generation', mask_token=None, card_data={'base_model': None, 'datasets': None, 'eval_results': None, 'language': None, 'library_name': 'transformers', 'license': 'gemma', 'license_name': None, 'license_link': None, 'metrics': None, 'model_name': None, 'pipeline_tag': None, 'tags': None, 'extra_gated_heading': 'Access Gemma on Hugging Face', 'extra_gated_prompt': 'To access Gemma on Hugging Face, you’re required to review and agree to Google’s usage license. To do this, please ensure you’re logged-in to Hugging Face and click below. Requests are processed immediately.', 'extra_gated_button_content': 'Acknowledge license'}, widget_data=[{'text': 'My name is Julien and I like to'}, {'text': 'My name is Thomas and my main'}, {'text': 'My name is Mariama, my favorite'}, {'text': 'My name is Clara and I am'}, {'text': 'My name is Lewis and I like to'}, {'text': 'My name is Merve and my favorite'}, {'text': 'My name is Teven and I am'}, {'text': 'Once upon a time,'}], model_index=None, config={'architectures': ['GemmaForCausalLM'], 'model_type': 'gemma', 'tokenizer_config': {'bos_token': '<bos>', 'eos_token': '<eos>', 'pad_token': '<pad>', 'unk_token': '<unk>', 'use_default_system_prompt': False}}, transformers_info=TransformersInfo(auto_model='AutoModelForCausalLM', custom_class=None, pipeline_tag='text-generation', processor='AutoTokenizer'), siblings=[RepoSibling(rfilename='.gitattributes', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='README.md', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='config.json', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='examples/example_fsdp.py', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='examples/example_sft_qlora.py', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='examples/notebook_sft_peft.ipynb', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='gemma-7b.gguf', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='generation_config.json', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='model-00001-of-00004.safetensors', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='model-00002-of-00004.safetensors', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='model-00003-of-00004.safetensors', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='model-00004-of-00004.safetensors', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='model.safetensors.index.json', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='special_tokens_map.json', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='tokenizer.json', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='tokenizer.model', size=None, blob_id=None, lfs=None), RepoSibling(rfilename='tokenizer_config.json', size=None, blob_id=None, lfs=None)], spaces=['eduagarcia/open_pt_llm_leaderboard', 'Omnibus/google-gemma', 'yenniejun/tokenizers-languages', 'Omnibus/Chatbot-Compare', 'ngebodh/SimpleChatbot', 'allenai/URIAL-Bench', 'Cognitive-Lab/indic_llm_leaderboard', 'CosmoAI/BhagwatGeeta', 'evanperez/CTP-week3-demo', 'prometheus-eval/BiGGen-Bench-Leaderboard', 'Omnibus/InferenceClient_Chatbots', 'taka-yamakoshi/tokenizer-demo', 'yhavinga/dutch-tokenizer-arena', 'Tomoniai/gemma-chat', 'Justinrune/LLaMA-Factory', 'SeaEval/SeaEval_Leaderboard', 'quantpi/llm-assessments', 'Sagar23p/mistralAI_chatBoat', 'DHEIVER/gemma-2b-it-dheiver', '5w4n/burmese-tokenizers', 'fantos/Chatbot-Compare', 'torahCodes/Torah_Codes', 'amirgame197/Gemma-Chat', 'open-llm-leaderboard/GenerationVisualizer', 'kenken999/fastapi_django_main_live', 'CosmoAI/ChitChat', 'jonathanjordan21/chat_with_me', 'daiwk/google-gemma-2b-it-serving', 'Ji-Xiang/google-gemma', 'Kvikontent/google-gemma-7b', 'dwb2023/model_explorer2', 'samidh/cope-preview', 'nikhilkomakula/nk-openpages-intellibot', 'VoidsAreThere65715/Gemma-7B', 'soroushsrd/Pubmed_QA', 'rudolphjhs/Universal-Pivot-7b', 'SejaMenath2025/google-gemma-7b', 'samidh/cope-dev', 'LAYEK-143/google-gemma-7b', 'TrinitySlr/google-gemma-7b', 'javayhu/google-gemma-7b', 'lxc0422/google-gemma-7b', 'shanimalik389/google-gemma-7b', 'ahricat/google-gemma-7b', 'Mrzn10/google-gemma-7b', 'AilexGPT/Chatbot-Compare', 'Krats/google-gemma-7b', 'Yahir/gemmaw', 'damiandata/google-gemma-7b', 'oscarwang2/google_gemma_model_demo', 'dwb2023/model_explorer4', 'alexkueck/LIRAGTest', 'MuNian/google-gemma-7b', 'DeeKaa/google-gemma-7b', 'FREE-AI/google-gemma', 'BRJDEV/google-gemma-7b', 'baebl/google-gemma-7b', 'vico24826/google-gemma-7b', 'AyushDey/google-gemma-7b', 'AshhadDevLab/google-gemma-7b', 'negismohit123/gemmaLiBot', 'Megasazou/google-gemma-7b', 'Nymbo/Chatbot-Compare', 'pmv-hou/linkedin_post_generator', 'ngebodh/SimpleChatbot-Backup', '132codeli/google-gemma-7b', 'eNuminous/google-gemma-7b', 'whatnextalgo/LLMsIntro', 'Shankarm08/google-gemma-7b', 'negismohit123/test_Gradio', 'negismohit123/LinkedIn_Bot_Gemma_Streamlit', 'rothbencc/google-gemma-7b', 'yangb0911/google-gemma-7b', 'arifhosan/google-gemma-7b', 'Ivan1579/google-gemma-7b', 'avilbopalia/learnllm', 'bishka/google-gemma-7b', 'jesuswithclinton/bibleai_1', 'DemonicAK/google-gemma-7b', 'Ultrazartrex/google-gemma-7b', 'allknowingroger/google-gemma-7b', 'darkstar94/gemma-7b', 'Sripathy/google-gemma-7b', 'vonshed/SimpleChatbot', 'Ehsanjahanbakhsh/google-gemma-7b', 'mbenachour/google-gemma-7b', 'SilentWraith/google-gemma-dev2', 'lazarusx/google-gemma-7b', 'ajeetkhf/gemmaFirstHW', 'Ya2023/google-gemma-7b', 'zhaofan2024/google-gemma-7b', 'yitlian/google-gemma', 'tanishdt/google-gemma-7b', 'Zoory/google-gemma', 'abdullahalzubaer/mistral-chatbot', 'ahsabbir104/koodi-gemma-7b', 'hlydecker/google-gemma-7b', 'INDHU123/Chatbot_comparing_results', 'Ericosmic/mistral-chatbot', 'K00B404/Teachershub'], safetensors=SafeTensorsInfo(parameters={'BF16': 8537680896}, total=8537680896))

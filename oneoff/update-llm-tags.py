@@ -34,16 +34,29 @@ def load_repos_from_list(repo_ids):
     repos_without_tags = []
     
     for repo_id in repo_ids:
-        _, metadata = load_metadata(repo_id)
-        if 'pipeline_tag' in metadata:
-            filtered_repos.append(repo_id)
-        elif 'tags' in metadata and 'text-to-image' in metadata['tags']:
-            filtered_repos.append(repo_id)
-        elif 'library_name' in metadata and metadata['library_name'] == "transformers" and \
-           'pipeline_tag' in metadata and metadata['pipeline_tag'] == "text-generation":
-            filtered_repos.append(repo_id)
-        else:
+        api = HfApi()
+        try:
+            model_info = api.model_info(repo_id=repo_id)
+            if model_info.pipeline_tag and model_info.library_name:
+                filtered_repos.append(repo_id)
+            else:
+                if any(sibling.rfilename == "config.json" for sibling in model_info.siblings):
+                    # Transformers library requires this file.
+                    repos_without_tags.append(repo_id)
+        except Exception as e:
+            print(f"An error occurred while fetching model info for {repo_id}: {e}")
             repos_without_tags.append(repo_id)
+        
+        # _, metadata = load_metadata(repo_id)
+        # if 'pipeline_tag' in metadata:
+        #     filtered_repos.append(repo_id)
+        # elif 'tags' in metadata and 'text-to-image' in metadata['tags']:
+        #     filtered_repos.append(repo_id)
+        # elif 'library_name' in metadata and metadata['library_name'] == "transformers" and \
+        #    'pipeline_tag' in metadata and metadata['pipeline_tag'] == "text-generation":
+        #     filtered_repos.append(repo_id)
+        # else:
+        #     repos_without_tags.append(repo_id)
     
     print("Repos already tagged correctly:")
     print(filtered_repos)
