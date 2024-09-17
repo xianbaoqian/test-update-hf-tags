@@ -57,11 +57,16 @@ def find_likely_transformers_repos(repo_ids):
         if model_info.pipeline_tag and model_info.library_name:
             already_tagged_repos.append(repo_id)
             continue
-        elif model_info.library_name == "diffusers":
+        
+        if model_info.library_name == "diffusers":
             already_tagged_repos.append(repo_id)
             continue
         
-        if any(tag.lower() in ["colbert", "nemo", "paddlenlp"] for tag in model_info.tags):
+        if 'ggml' in repo_id.lower():
+            other_repos.append(repo_id)
+            continue
+        
+        if any(tag.lower() in ["colbert", "nemo", "paddlenlp", "ggml", "sam2"] for tag in model_info.tags):
             other_repos.append(repo_id)
             continue
         
@@ -119,7 +124,10 @@ def display_readme(repo_id):
         
         for line in readme_lines[start:start+lines_per_page]:
             print(line)
-        print("Press 'y' to confirm update, 'n' to cancel, or space to continue: ", end='', flush=True)
+        if start + lines_per_page >= len(readme_lines):
+            print("Press 'y' to confirm update, 'n' to cancel: ", end='', flush=True)
+        else:
+            print("Press 'y' to confirm update, 'n' to cancel, or space to continue: ", end='', flush=True)
         while True:
             key = get_key_press()
             if key.lower() == 'y':
@@ -128,7 +136,7 @@ def display_readme(repo_id):
             elif key.lower() == 'n':
                 print(f"\nNot confirmed: {repo_id}")
                 return False
-            elif key == ' ':
+            elif key == ' ' and start + lines_per_page < len(readme_lines):
                 break
             elif key == '\x03':  # Ctrl+C
                 print("\nOperation cancelled by user (Ctrl+C).")
@@ -138,7 +146,6 @@ def display_readme(repo_id):
                 exit(1)
         start += lines_per_page
     return False
-
 
 def display_and_confirm_repos(repo_ids):
     """
@@ -167,6 +174,45 @@ def display_and_confirm_repos(repo_ids):
 
     return confirmed_repos
 
+def filter_repos_with_transformers_import(repo_ids):
+    """
+    Filter repositories that contain 'import transformers' or 'from transformers import' in their README.
+
+    Args:
+        repo_ids (list): List of repository IDs to check.
+
+    Returns:
+        list: List of repository IDs with the import statement.
+    """
+    auto_confirmed = []
+    to_be_confirmed = []
+    api = HfApi()
+
+    for repo_id in repo_ids:
+        repo_card, _ = load_metadata(repo_id)
+        if not repo_card:
+            # Skip these
+            continue
+
+        if "import transformers" in repo_card.content or "from transformers import" in repo_card.content:
+            if 'pip install transformers' in repo_card.content:
+                to_be_confirmed.append(repo_id)
+                continue
+            print(f"Repo {repo_id} contains 'import transformers' or 'from transformers import'")
+            auto_confirmed.append(repo_id)
+            continue
+        
+        model_info = api.model_info(repo_id=repo_id)
+        if model_info.config and "transformers_version" in model_info.config:
+            print(f"Repo {repo_id} contains 'transformers_version' in its config.")
+            auto_confirmed.append(repo_id)
+            continue
+        
+        to_be_confirmed.append(repo_id)
+
+    print(f"repos auto-confirmed: {auto_confirmed}")
+    print(f"repos to be confirmed: {to_be_confirmed}")
+    return auto_confirmed, to_be_confirmed
 
 def filter_repos_without_prs(repo_ids):
     """
@@ -222,17 +268,26 @@ def update_repos_metadata(repo_ids):
             import traceback
             print(traceback.format_exc())
 
-
 if __name__ == "__main__":
     from utils.trendy import get_no_library_repos
 
-    initial_repo_ids = get_no_library_repos(sort="likes30d", limit=20)
+    initial_repo_ids = get_no_library_repos(sort="likes30d", limit=500)
+    with open("all_repos.yaml", "w") as file:
+        yaml.dump({"all_repos": initial_repo_ids}, file)
     
     likely_transformers_repos = find_likely_transformers_repos(initial_repo_ids)
-    confirmed_repos = display_and_confirm_repos(likely_transformers_repos)
-    repos_without_prs = filter_repos_without_prs(confirmed_repos)
+    repos_without_prs = filter_repos_without_prs(likely_transformers_repos)
     
-    with open("repos_without_prs.yaml", "w") as file:
-        yaml.dump(repos_without_prs, file)
+    repos_with_import, repos_without_import = filter_repos_with_transformers_import(repos_without_prs)
+    
+    print(f"Repos without imports to be confirmed: {repos_without_import}")
+        
+    confirmed_repos = display_and_confirm_repos(repos_without_import)
+    processing_repos = repos_with_import + confirmed_repos
+    
+    with open("processed_repos.yaml", "w") as file:
+        yaml.dump(processing_repos, file)
+    
+    # update_repos_metadata(processing_repos)
 
 

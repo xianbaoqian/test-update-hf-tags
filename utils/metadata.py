@@ -24,7 +24,7 @@ def load_metadata(repo_id: str) -> Optional[Tuple[RepoCard, Dict]]:
     except Exception as e:
         print(f"Error loading metadata from repository {repo_id}: {str(e)}")
         print(traceback.format_exc())
-        return None
+        return None, None
 
 def update_metadata(metadata: Dict, library_name: str = "transformers") -> Dict:
     """
