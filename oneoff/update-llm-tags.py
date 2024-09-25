@@ -49,8 +49,6 @@ def find_likely_transformers_repos(repo_ids):
                 cache[repo_id] = model_info
             except Exception as e:
                 print(f"An error occurred while fetching model info for {repo_id}: {e}")
-                import traceback
-                traceback.print_exc()
                 print("Exiting the process due to an error.")
                 sys.exit(1)
 
