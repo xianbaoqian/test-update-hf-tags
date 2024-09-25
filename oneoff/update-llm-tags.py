@@ -260,7 +260,7 @@ def update_repos_metadata(repo_ids):
             # metadata["pipeline_tag"] = "text-generation"
             pr_url = save_metadata(repo_id, metadata, create_pr=True, commit_message="Update metadata: Add library_name to Transformers")
             if pr_url:
-                print(f"PR created for {repo_id}. PR URL: {pr_url}")
+                print(f"PR created for {repo_id}  PR URL: {pr_url}")
             else:
                 print(f"Failed to create PR for {repo_id}.")
         except Exception as e:
@@ -268,7 +268,11 @@ def update_repos_metadata(repo_ids):
             import traceback
             print(traceback.format_exc())
 
-if __name__ == "__main__":
+
+
+
+def dry_run():
+    print("Starting dry run...")
     from utils.trendy import get_no_library_repos
 
     initial_repo_ids = get_no_library_repos(sort="likes30d", limit=500)
@@ -288,6 +292,41 @@ if __name__ == "__main__":
     with open("processed_repos.yaml", "w") as file:
         yaml.dump(processing_repos, file)
     
-    # update_repos_metadata(processing_repos)
+    print(f"\nDry run completed. {len(processing_repos)} repositories identified for updating.")
+    print("Review the 'processed_repos.yaml' file for the list of repositories.")
+    
+    return processing_repos
 
+def update_repos():
+    print("Starting the update process...")
+    
+    # Load processed repos from YAML file
+    with open("processed_repos.yaml", "r") as file:
+        processing_repos = yaml.safe_load(file)
+    
+    if not processing_repos:
+        print("No repositories found in processed_repos.yaml. Exiting.")
+        return
+    
+    print(f"Loaded {len(processing_repos)} repositories from processed_repos.yaml:")
+    print(processing_repos)
+    
+    update_repos_metadata(processing_repos)
+    print("Update process completed.")
 
+if __name__ == "__main__":
+    # Uncomment below to actually update the metadata
+    # update_repos()
+    
+    processing_repos = dry_run()
+    
+    if processing_repos:
+        print("\nDry run completed. Do you want to proceed with updating the repositories?")
+        confirmation = input("Enter 'yes' to continue or any other key to exit: ").lower()
+        
+        if confirmation == 'yes':
+            update_repos()
+        else:
+            print("Update process cancelled.")
+    else:
+        print("No repositories to update. Exiting.")
