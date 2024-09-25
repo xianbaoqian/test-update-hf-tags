@@ -31,7 +31,7 @@ This script is designed to identify and update repositories on Hugging Face that
 
 1. Run the dry run:
    ```
-   python update-llm-tags.py
+   python -m oneoff.update-llm-tags
    ```
    This will perform all checks and filters without making any changes.
 
@@ -40,7 +40,7 @@ This script is designed to identify and update repositories on Hugging Face that
    - `filtered_repos.yaml`: Repositories categorized by different filters
    - `processed_repos.yaml`: Final list of repositories to be updated
 
-3. If you're satisfied with the dry run results, run the script again and confirm when prompted to proceed with the updates.
+3. If you're satisfied with the dry run results, confirm when prompted to proceed with the updates.
 
 ## How it works
 
